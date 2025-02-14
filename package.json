@@ -11,7 +11,6 @@
     "migrate:undo:all": "npx sequelize-cli db:migrate:undo:all --config src/config/sequelize.config.js --migrations-path src/migrations",
     "seed": "npx sequelize-cli db:seed:all --config src/config/sequelize.config.js --seeders-path src/seeders",
     "seed:undo": "npx sequelize-cli db:seed:undo:all --config src/config/sequelize.config.js --seeders-path src/seeders"
-
   },
   "keywords": [],
   "author": "",
@@ -20,6 +19,7 @@
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "express-validator": "^7.2.1",
     "install": "^0.13.0",
     "jsonwebtoken": "^9.0.2",
     "npm": "^11.1.0",

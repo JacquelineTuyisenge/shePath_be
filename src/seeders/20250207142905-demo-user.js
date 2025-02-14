@@ -1,17 +1,18 @@
 "use strict";
-const { v4: uuidv4 } = require("uuid"); 
+const { v4: uuidv4 } = require("uuid");
 
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.bulkInsert(
-      "Users",
+      "users", // Ensured table name is lowercase to match the model
       [
         {
-          id: uuidv4(), 
-          username: "johndoe",
+          id: uuidv4(),
+          userName: "johndoe", // Renamed `username` to `userName`
+          firstName: "John", // Added missing `firstName`
+          lastName: "Doe", // Added missing `lastName`
           email: "johndoe@example.com",
           password: "hashedpassword123", 
-          confirmPassword: "hashedpassword123", 
           role: "lumina",
           active: true,
           gender: "Male",
@@ -26,10 +27,11 @@ module.exports = {
         },
         {
           id: uuidv4(),
-          username: "janedoe",
+          userName: "janedoe", // Renamed `username` to `userName`
+          firstName: "Jane", // Added missing `firstName`
+          lastName: "Doe", // Added missing `lastName`
           email: "janedoe@example.com",
           password: "hashedpassword456",
-          confirmPassword: "hashedpassword456",
           role: "beacon",
           active: true,
           gender: "Female",
@@ -48,6 +50,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete("Users", null, {});
+    await queryInterface.bulkDelete("users", null, {}); // Ensured lowercase table name
   },
 };

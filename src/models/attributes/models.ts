@@ -1,42 +1,29 @@
-import {Optional} from 'sequelize'
+import { Optional } from "sequelize";
 
 export interface UserModel {
     id: string;
-	userName: string;
-	firstName: string;
-	lastName: string;
-	email: string;
-	password: string;
-	confirmPassword: string;
-	role: string;
-	active?: boolean;
+    userName: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    password?: string;
+    role: string;
+    active?: boolean;
     createdAt?: Date;
     updatedAt?: Date;
-	gender?: string;
-	birthDate?: Date;
-	phoneNumber?: string;
-	profile?: string;
-	address?: string;
-	country?: string;
-	city?: string;
+    gender?: string;
+    birthDate?: Date;
+    phoneNumber?: string;
+    profile?: string;
+    address?: string;
+    country?: string;
+    city?: string;
 }
 
-export interface UserModelInclude extends UserModel {
-	Roles: any;
-}
-
+// Used when creating a new user (Optional fields for creation)
 export type UserCreationAttributes = Optional<
-	UserModel,
-	"id" | "createdAt" | "updatedAt"
+    UserModel,
+    "id" | "createdAt" | "updatedAt"
 > & {
-	role?: string;
-	firstName?: string;
-	lastName?: string;
-	gender?: string;
-	birthDate?: Date;
-	phoneNumber?: string;
-	profile?: string;
-	address?: string;
-	country?: string;
-	city?: string;
+    confirmPassword?: string; // Only needed during input validation, not stored in DB
 };
