@@ -2,6 +2,8 @@ import express from 'express';
 import { connectDB } from './server';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes';
+import cors from 'cors';
+
 
 dotenv.config();
 
@@ -9,6 +11,12 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 
 app.use(express.json());
+
+//cors
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true
+}));
 
 //use auth routes
 app.use('/api/auth', authRoutes);
