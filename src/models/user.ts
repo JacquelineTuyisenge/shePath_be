@@ -1,13 +1,17 @@
-import { Sequelize, Model, DataTypes, UUIDV4 } from "sequelize";
+import { Sequelize, Model, DataTypes, UUIDV4, Optional } from "sequelize";
+import { UserCreationAttributes, UserModelAttributes } from "./attributes";
+// import { database_models } from "../server";
+import Models from ".";
+import Role from "./role";
 
-export class User extends Model {
+export class User extends Model<UserModelAttributes, UserCreationAttributes> {
     public id!: string;
     public userName!: string;
     public firstName!: string;
     public lastName!: string;
     public email!: string;
     public password!: string;
-    public role!: "lumina" | "beacon" | "pillar" | "overseer";
+    public role!: string;
     public active!: boolean;
     public gender?: "Male" | "Female" | "Other";
     public birthDate?: Date;
@@ -16,6 +20,17 @@ export class User extends Model {
     public address?: string;
     public country?: string;
     public city?: string;
+
+    public static associate(models: { role: typeof Role }) {
+        console.log("Role model at association time:", models.role);
+        if (!models.role) {
+          throw new Error("Role model is not defined at association time.");
+        }
+        User.belongsTo(models.role, { as: "Roles", foreignKey: "role" });
+    }
+      
+      
+
 }
 
 export const initUserModel = (sequelize: Sequelize) => {
@@ -52,10 +67,13 @@ export const initUserModel = (sequelize: Sequelize) => {
                 allowNull: false,
             },
             role: {
-                type: DataTypes.ENUM("lumina", "beacon", "pillar", "overseer"),
+                type: DataTypes.UUID,
                 allowNull: false,
-                defaultValue: "lumina",
-            },
+                references: {
+                  model: "roles",
+                  key: "id",
+                },
+            },              
             active: {
                 type: DataTypes.BOOLEAN,
                 allowNull: false,
@@ -96,6 +114,14 @@ export const initUserModel = (sequelize: Sequelize) => {
             tableName: "users",
         }
     );
+
+    User.beforeCreate(async (user) => {
+        if (!user.role) {
+            const learnerRole = await Role.findOne({ where: { name: "Learner" } });
+            user.role = learnerRole ? learnerRole.id : "";
+        }
+    });
+    return User;
 };
 
 export default User;
