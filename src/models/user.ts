@@ -1,7 +1,7 @@
 import { Sequelize, Model, DataTypes, UUIDV4, Optional } from "sequelize";
 import { UserCreationAttributes, UserModelAttributes } from "./attributes";
 // import { database_models } from "../server";
-import Models from ".";
+// import Models from ".";
 import Role from "./role";
 
 export class User extends Model<UserModelAttributes, UserCreationAttributes> {

@@ -2,6 +2,7 @@ import express from 'express';
 import { connectDB } from './server';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes';
+import roleRoutes from './routes/roleRoutes'
 import cors from 'cors';
 
 
@@ -20,6 +21,7 @@ app.use(cors({
 
 //use auth routes
 app.use('/api/auth', authRoutes);
+app.use('/api/sec', roleRoutes)
 
 // default route
 app.get('/', (req, res) => {

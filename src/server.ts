@@ -1,6 +1,8 @@
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
-import Models from './models';
+// import Models from './models';
+import { initUserModel } from './models/user';
+import { initRoleModel } from './models/role';
 
 dotenv.config();
 
@@ -10,6 +12,11 @@ const sequelize = new Sequelize(DB, {
     dialect: 'postgres',
     logging: false,
 });
+
+//initialize models
+initUserModel(sequelize);
+initRoleModel(sequelize);
+
 
 const connectDB = async () => {
     try {

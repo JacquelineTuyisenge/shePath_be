@@ -20,14 +20,13 @@ export const registerUser = async (req: Request, res: Response) => {
             return;
         }
         const userExists = await User.findOne({ where: { email } });
-        console.log('body body body body',req.body);
 
         if (userExists) {
             res.status(400).json({ message: "User already exists" });
             return;
         }
 
-        //hash password before saving them
+        // hash password before saving them
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const learnerRole = await Role.findOne({ where: { name: "Learner" }});
@@ -38,10 +37,10 @@ export const registerUser = async (req: Request, res: Response) => {
             password: hashedPassword 
         });
 
-        res.status(201).json({ message: "User registered successfully", token: generateToken(newUser.id, newUser.role) });
+        res.status(201).json({ message: "User registered successfully",  }); //token: generateToken(newUser.id, newUser.role)
     } catch (error: any) {
         console.error("Registration error:", error);
-        res.status(500).json({ message: "Server error", error: error.message });
+        res.status(500).json({ message: "Server error", error: error.message }); 
     };
 };
 
@@ -60,19 +59,40 @@ export const loginUser = async (req: Request, res: Response) => {
             return;
         }
 
-        res.json({ token: generateToken(user.id, user.role), user });
+        res.json({ message: "user logged in successfully!", token: generateToken(user.id, user.role), user });
     } catch (error) {
         res.status(500).json({ message: "Server error" });
     }
 };
 
-export const getAllUsers = async (req: Request, res: Response) => {
-    try{
+export const getAllUsers = async (req: Request, res: Response): Promise<void> => {
+    try {
         const users = await User.findAll();
-        return res.status(200).json({message: "users retrieved successfully", users});
-    }catch(error){
-        return res.status(500).json({ message: "Server error", error });
+        res.status(200).json({ message: "Users retrieved successfully", users });
+        return;
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error });
+        return;
     }
+};
+
+// export const getSingleUser = async (req: Request, res: Response): Promise<void> => {
+//     try {
+//         const user = await User.findOne({where: { email}});
+//         res.status(200).json({ message: "Users retrieved successfully", users });
+//         return;
+//     } catch (error) {
+//         res.status(500).json({ message: "Server error", error });
+//         return;
+//     }
+// };
+
+export const logout = async (req: Request, res: Response) => {
+	
+};
+
+export const updatePassword = async (req: Request, res: Response) => {
+
 };
 
 // export const getProfile = async (req: AuthenticatedRequest, res: Response) => {
@@ -86,3 +106,4 @@ export const getAllUsers = async (req: Request, res: Response) => {
 //         res.status(500).json({ message: "Server error" });
 //     }
 // };
+
