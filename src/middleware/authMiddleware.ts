@@ -21,9 +21,17 @@ export const isAdmin = async (req: AuthRequest, res: Response, next: NextFunctio
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as {id: string};
         const user = await User.findByPk(decoded.id);
+    
 
-        if (!user || user.role !== "8942ceed-9f7e-4b8b-a4aa-9966c819f385") {
+        if (!user) {
             res.status(403).json({ message: "Access denied"});
+            return;
+        }
+
+        const userRole = await Role.findByPk(user.role);
+
+        if (userRole?.name !== "Admin") {
+            res.status(403).json({ message: "Access denied, FORBIDDEN"});
             return;
         }
 
@@ -34,7 +42,7 @@ export const isAdmin = async (req: AuthRequest, res: Response, next: NextFunctio
         res.status(401).json({message: "something went wrong", error});
         return;
     }
-}
+};
 
 
 export const authenticateUser = async (req: Request, res: Response, next: NextFunction) => {

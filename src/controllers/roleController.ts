@@ -18,9 +18,11 @@ export const createRole = async (req: Request, res: Response) => {
     try{
         const {role} = req.body;
 
-		let condition = { where: { roleName: req.body.roleName } };
+		let condition = { where: { name: req.body.role } };
+
 
         const roleExists = await Role.findOne(condition);
+        
         if(roleExists){
             res.status(400).json({message: "Role already exists"});
             return;
@@ -44,14 +46,19 @@ export const assignRole = async (req: Request, res: Response) => {
 
         // Find role by name
         const existingRole = await Role.findOne({ where: { name: role } });
+        console.log("existingRole",existingRole);
+
         if (!existingRole) {
-            return sendResponse(res, 404, "NOT FOUND", "Role not found");
+            sendResponse(res, 404, "NOT FOUND", "Role not found");
+            return;
         }
 
         // Find user by ID
         const user = await User.findByPk(userId);
+        console.log("user",user);
         if (!user) {
-            return sendResponse(res, 404, "NOT FOUND", "User not found");
+            sendResponse(res, 404, "NOT FOUND", "User not found");
+            return;
         }
 
         // Assign role to user
@@ -60,12 +67,14 @@ export const assignRole = async (req: Request, res: Response) => {
         // Fetch updated user with role details
         const updatedUser = await User.findOne({
             where: { id: userId },
-            include: [{ model: Role, as: "Roles" }],
+            include: [{ model: Role, as: "roleDetail" }],
         });
 
-        return sendResponse(res, 201, "SUCCESS", "Role assigned successfully!", updatedUser);
+        sendResponse(res, 201, "SUCCESS", "Role assigned successfully!", updatedUser);
+        return;
     } catch (error:any) {
-        return sendResponse(res, 500, "SERVER ERROR", "Something went wrong!", error.message);
+        sendResponse(res, 500, "SERVER ERROR", "Something went wrong!", error.message);
+        return;
     }
 };
 
@@ -75,15 +84,18 @@ export const updateRole = async (req: Request, res: Response) => {
         // Find role by ID
         const role = await Role.findOne({ where: { id } });
         if (!role) {
-            return sendResponse(res, 404, "NOT FOUND", `Role with ID ${id} doesn't exist`);
+            sendResponse(res, 404, "NOT FOUND", `Role with ID ${id} doesn't exist`);
+            return;
         }
 
         // Update role name
         await Role.update({ name: req.body.name }, { where: { id } });
 
-        return sendResponse(res, 201, "SUCCESS", "Role updated successfully");
+        sendResponse(res, 201, "SUCCESS", "Role updated successfully");
+        return;
     } catch (error: any) {
-        return sendResponse(res, 500, "SERVER ERROR", "Something went wrong!", error.message);
+        sendResponse(res, 500, "SERVER ERROR", "Something went wrong!", error.message);
+        return;
     }
 };
 

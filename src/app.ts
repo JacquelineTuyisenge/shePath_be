@@ -21,7 +21,7 @@ app.use(cors({
 
 //use auth routes
 app.use('/api/auth', authRoutes);
-app.use('/api/sec', roleRoutes)
+app.use('/api/roles', roleRoutes)
 
 // default route
 app.get('/', (req, res) => {

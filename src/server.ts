@@ -1,8 +1,8 @@
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 // import Models from './models';
-import { initUserModel } from './models/user';
-import { initRoleModel } from './models/role';
+import User, { initUserModel } from './models/user';
+import Role, { initRoleModel } from './models/role';
 
 dotenv.config();
 
@@ -17,6 +17,12 @@ const sequelize = new Sequelize(DB, {
 initUserModel(sequelize);
 initRoleModel(sequelize);
 
+// **associate models properly**
+const associateModels = () => {
+    User.associate({ Role });
+    Role.associate({ User });
+};
+associateModels();
 
 const connectDB = async () => {
     try {

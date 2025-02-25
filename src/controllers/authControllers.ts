@@ -37,6 +37,9 @@ export const registerUser = async (req: Request, res: Response) => {
             password: hashedPassword 
         });
 
+        const userRole = await Role.findByPk(newUser.role);
+        console.log("user role", userRole);
+
         res.status(201).json({ message: "User registered successfully",  }); //token: generateToken(newUser.id, newUser.role)
     } catch (error: any) {
         console.error("Registration error:", error);
@@ -47,19 +50,31 @@ export const registerUser = async (req: Request, res: Response) => {
 export const loginUser = async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body;
+
         const user = await User.findOne({ where: { email } });
         if (!user) {
             res.status(400).json({ message: "Invalid credentials" });
             return;
         } 
-
+   
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             res.status(400).json({ message: "Invalid credentials" });
             return;
         }
 
-        res.json({ message: "user logged in successfully!", token: generateToken(user.id, user.role), user });
+        // Retrieve role name dynamically
+        const userRole = await Role.findByPk(user.role);
+        console.log("user role", userRole?.name);
+
+        res.json({ 
+            message: "user logged in successfully!", 
+            token: generateToken(user.id, user.role), 
+            user: {
+                id: user.id,
+                role: userRole?.name
+            }
+            });
     } catch (error) {
         res.status(500).json({ message: "Server error" });
     }
@@ -67,10 +82,29 @@ export const loginUser = async (req: Request, res: Response) => {
 
 export const getAllUsers = async (req: Request, res: Response): Promise<void> => {
     try {
-        const users = await User.findAll();
-        res.status(200).json({ message: "Users retrieved successfully", users });
+        const users = await User.findAll({
+            include: [
+                {
+                    model: Role,
+                    as: "roleDetail",
+                    attributes: ["name"]
+                },
+            ],
+    45vb;        });
+
+        const neededUsers = users.map((user) => ({
+            id: user.id,
+            userName: user.userName,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            role: (user as any).roleDetail?.name
+        }));
+
+        res.status(200).json({ message: "Users retrieved successfully", users: neededUsers });
         return;
     } catch (error) {
+        console.error("Error fetching users:", error);
         res.status(500).json({ message: "Server error", error });
         return;
     }

@@ -5,6 +5,8 @@ import { roleCreationAttributes, roleModelAttributes } from "./attributes";
 
 export class Role extends Model<roleModelAttributes, roleCreationAttributes> {
     id!: string;
+    name!: string;
+
     public static associate(models: { User: typeof User }) {
         Role.hasMany(models.User, { as: "Users", foreignKey: "role"});
     }
@@ -26,7 +28,7 @@ export const initRoleModel = (sequelize: Sequelize) => {
         },
         {
             sequelize,
-            tableName: "roles",
+            tableName: "roles"
         }
     );
     return Role;

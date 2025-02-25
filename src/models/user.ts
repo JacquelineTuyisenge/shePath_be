@@ -21,16 +21,12 @@ export class User extends Model<UserModelAttributes, UserCreationAttributes> {
     public country?: string;
     public city?: string;
 
-    public static associate(models: { role: typeof Role }) {
-        console.log("Role model at association time:", models.role);
-        if (!models.role) {
-          throw new Error("Role model is not defined at association time.");
-        }
-        User.belongsTo(models.role, { as: "Roles", foreignKey: "role" });
-    }
-      
-      
+    public roleDetail?: Role;
 
+    public static associate(models: { Role: typeof Role }) {
+        User.belongsTo(models.Role, { as: "roleDetail", foreignKey: "role" });
+    }    
+      
 }
 
 export const initUserModel = (sequelize: Sequelize) => {
