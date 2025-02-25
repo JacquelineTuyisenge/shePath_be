@@ -90,7 +90,7 @@ export const getAllUsers = async (req: Request, res: Response): Promise<void> =>
                     attributes: ["name"]
                 },
             ],
-    45vb;        });
+            });
 
         const neededUsers = users.map((user) => ({
             id: user.id,
