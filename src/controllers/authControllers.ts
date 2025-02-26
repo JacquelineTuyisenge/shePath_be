@@ -98,7 +98,8 @@ export const getAllUsers = async (req: Request, res: Response): Promise<void> =>
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
-            role: (user as any).roleDetail?.name
+            status: user.active,
+            role: (user as any).roleDetail.name
         }));
 
         res.status(200).json({ message: "Users retrieved successfully", users: neededUsers });

@@ -99,5 +99,22 @@ export const updateRole = async (req: Request, res: Response) => {
     }
 };
 
+export const deleteRole = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+        // Find role by ID
+        const role = await Role.findOne({ where: { id } });
+        if (!role) {
+            sendResponse(res, 404, "NOT FOUND", `Role with ID ${id} doesn't exist`);
+            return;
+        }
 
+        // Delete role
+        await Role.destroy({ where: { id } });
 
+        sendResponse(res, 201, "SUCCESS", "Role deleted successfully");
+    } catch (error: any) {
+        sendResponse(res, 500, "SERVER ERROR", "Something went wrong!", error.message);
+        return;
+    }
+};
