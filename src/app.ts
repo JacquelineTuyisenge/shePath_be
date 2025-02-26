@@ -2,6 +2,9 @@ import express from 'express';
 import { connectDB } from './server';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes';
+import roleRoutes from './routes/roleRoutes'
+import cors from 'cors';
+
 
 dotenv.config();
 
@@ -10,8 +13,15 @@ const app = express();
 
 app.use(express.json());
 
+//cors
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true
+}));
+
 //use auth routes
 app.use('/api/auth', authRoutes);
+app.use('/api/roles', roleRoutes)
 
 // default route
 app.get('/', (req, res) => {

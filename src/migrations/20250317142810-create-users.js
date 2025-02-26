@@ -6,8 +6,8 @@ module.exports = {
       id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
-        primaryKey: true,
         allowNull: false,
+        primaryKey: true,
       },
       userName: {
         type: Sequelize.STRING,
@@ -25,15 +25,23 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true,
+        validate: {
+          isEmail: true,
+        },
       },
       password: {
         type: Sequelize.STRING,
         allowNull: false,
       },
       role: {
-        type: Sequelize.ENUM("lumina", "beacon", "pillar", "overseer"),
+        type: Sequelize.UUID,
         allowNull: false,
-        defaultValue: "lumina",
+        references: {
+          model: "roles", // Ensure "roles" table exists first
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL",
       },
       active: {
         type: Sequelize.BOOLEAN,
@@ -69,13 +77,13 @@ module.exports = {
         allowNull: true,
       },
       createdAt: {
-        type: Sequelize.DATE,
         allowNull: false,
+        type: Sequelize.DATE,
         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
       updatedAt: {
-        type: Sequelize.DATE,
         allowNull: false,
+        type: Sequelize.DATE,
         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     });
