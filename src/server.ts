@@ -3,6 +3,8 @@ import dotenv from 'dotenv';
 // import Models from './models';
 import User, { initUserModel } from './models/user';
 import Role, { initRoleModel } from './models/role';
+import CourseCategory, {initCourseCategoryModel} from './models/courseCategory';
+import Course, { initCourseModel } from './models/course';
 
 dotenv.config();
 
@@ -16,11 +18,15 @@ const sequelize = new Sequelize(DB, {
 //initialize models
 initUserModel(sequelize);
 initRoleModel(sequelize);
+initCourseCategoryModel(sequelize);
+initCourseModel(sequelize);
 
 // **associate models properly**
 const associateModels = () => {
     User.associate({ Role });
     Role.associate({ User });
+    Course.associate({CourseCategory});
+    CourseCategory.associate({Course});
 };
 associateModels();
 

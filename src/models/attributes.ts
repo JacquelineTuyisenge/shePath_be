@@ -31,3 +31,21 @@ export interface UserModelInclude extends UserModelAttributes {
 export type UserCreationAttributes = Optional<UserModelAttributes, "id"> & {
     role?: string;
 };
+
+export interface courseCategoryAttributes {
+    id: string;
+    name: string;
+    description?: string;
+}
+
+export interface courseCategoryCreationAttributes extends Partial<courseCategoryAttributes> {}
+
+export interface courseAttributes {
+    id: string;
+    title: string;
+    description?: string;
+    content: string;
+    categoryId: string;
+}
+
+export interface courseCreationAttributes extends Partial<courseAttributes> {}

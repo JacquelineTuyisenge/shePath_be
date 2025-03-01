@@ -2,7 +2,9 @@ import express from 'express';
 import { connectDB } from './server';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes';
-import roleRoutes from './routes/roleRoutes'
+import roleRoutes from './routes/roleRoutes';
+import courseRoutes from './routes/courseRoutes';
+import CourseCategoryRoutes from './routes/courseCategoryRoutes';
 import cors from 'cors';
 
 
@@ -21,7 +23,9 @@ app.use(cors({
 
 //use auth routes
 app.use('/api/auth', authRoutes);
-app.use('/api/roles', roleRoutes)
+app.use('/api/roles', roleRoutes);
+app.use('/api/courses', courseRoutes);
+app.use('/api/courseCategories', CourseCategoryRoutes)
 
 // default route
 app.get('/', (req, res) => {
