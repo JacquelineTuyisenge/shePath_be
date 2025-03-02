@@ -1,6 +1,7 @@
 import express from "express";
 import { validateCourse } from "../validations/course.validation";
-import { checkRole } from "../middleware/authMiddleware";
+// import { checkRole } from "../middleware/authMiddleware";
+import { isAdmin } from "../middleware/authMiddleware";
 import { createCourse, deleteCourse, getCourseById, getCourses, updateCourse } from "../controllers/course.controller";
 
 const router = express.Router();
@@ -8,8 +9,8 @@ const router = express.Router();
 router.get("/", getCourses); // Public
 router.get("/:id", getCourseById); // Public
 
-router.post("/:categoryId", checkRole(["admin", "mentor"]), validateCourse, createCourse); // Admin & Mentor
-router.patch("/:id/:categoryId", checkRole(["admin", "mentor"]), validateCourse, updateCourse); // Admin & Mentor
-router.delete("/:id", checkRole(["admin"]), deleteCourse); // Admin only
+router.post("/:categoryId", isAdmin, validateCourse, createCourse); 
+router.patch("/:id/:categoryId", isAdmin, validateCourse, updateCourse); 
+router.delete("/:id", isAdmin, deleteCourse); 
 
 export default router;

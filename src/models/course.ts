@@ -9,6 +9,9 @@ export class Course extends Model<courseAttributes, courseCreationAttributes> {
     content!: string;
     categoryId!: string;
 
+    public category?: CourseCategory;
+    createdAt: any;
+
     public static associate(models: { CourseCategory: typeof CourseCategory}) {
         Course.belongsTo(models.CourseCategory, { as: "category", foreignKey: "categoryId" });
     } 

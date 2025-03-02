@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { CourseCategory } from "../models/courseCategory";
+import Course from "../models/course";
 
 // Create a new course category
 export const createCourseCategory = async (req: Request, res: Response) => {
@@ -30,7 +31,7 @@ export const createCourseCategory = async (req: Request, res: Response) => {
 export const getCourseCategories = async (req: Request, res: Response) => {
   try {
     const categories = await CourseCategory.findAll();
-    res.status(200).json({ success: true, categories });
+    res.status(200).json({ status: 200, message: "course categories retrieved successfully", data: categories });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -78,6 +79,45 @@ export const updateCourseCategory = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+//change course category
+
+export const changeCourseCategory = async(req:Request, res:Response) => {
+  try{
+    const {courseCat} = req.body;
+    const courseId = req.params.courseId;
+
+    const existingCategory = await CourseCategory.findOne({ where: {name: courseCat}});
+
+    if(!existingCategory) {
+      res.status(404).json({message: "Category does not exist!"});
+      return;
+    }
+
+    const course = await Course.findByPk(courseId);
+    if(!course){
+      res.status(404).json({message: "Course not found"});
+      return;
+    }
+
+    await Course.update({categoryId: existingCategory.id}, {where: {id: courseId}});
+
+    const updatedCourse = await Course.findByPk(courseId, {
+      include: {
+        model: CourseCategory,
+        attributes: [
+          'name', 'description'
+        ]
+      },
+    });
+
+    res.status(201).json({message: "course category changed successfully", data: updatedCourse});
+    return;
+
+  }catch(error: any) {
+    res.status(500).json({message: "SERVER ERROR", error})
+  }
+}
 
 // Delete a course category
 export const deleteCourseCategory = async (req: Request, res: Response) => {
