@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/app.ts",
   "scripts": {
-    "test": "jest --config  package.json",
+    "test": "jest --config package.json",
     "dev": "nodemon src/app.ts",
     "start": "node --max-old-space-size=4096 dist/app.js",
     "build": "tsc",
@@ -33,24 +33,24 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
-    "bcryptjs": "^2.4.3",
+    "bcryptjs": "^3.0.2",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "express-validator": "^7.2.1",
     "install": "^0.13.0",
     "jsonwebtoken": "^9.0.2",
     "npm": "^11.1.0",
-    "pg": "^8.13.1",
+    "pg": "^8.13.3",
     "sequelize": "^6.37.5",
     "twilio": "^5.4.5",
-    "uuid": "^11.0.5"
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
-    "@types/jsonwebtoken": "^9.0.8",
+    "@types/jsonwebtoken": "^9.0.9",
     "@types/nodemon": "^1.19.6",
     "@types/sequelize": "^4.28.20",
     "cors": "^2.8.5",
@@ -59,6 +59,6 @@
     "sequelize-cli": "^6.6.2",
     "ts-jest": "^29.2.6",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.3"
+    "typescript": "^5.8.2"
   }
 }
