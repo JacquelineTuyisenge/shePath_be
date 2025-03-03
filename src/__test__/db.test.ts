@@ -7,13 +7,16 @@ describe('Database Connection', () => {
     let sequelize: Sequelize;
 
     beforeAll(async () => {
-        console.log('Database URL:', process.env.TEST_DB);  
         const databaseUrl = process.env.TEST_DB as string;
+        if (!databaseUrl) {
+            throw new Error("Database URL is not defined");
+        }
         sequelize = new Sequelize(databaseUrl, {
             dialect: 'postgres',
             logging: false
         });
     });
+    
 
     it('should successfully connect to the database', async () => {
         try {

@@ -9,12 +9,11 @@ on:
   pull_request:
     branches: [ "develop" ]
 
-env: 
-    TEST_DB: ${{ secrets.TEST_DB }}
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    env:
+      TEST_DB: ${{secrets.TEST_DB}}
 
     strategy:
       matrix:
@@ -31,4 +30,5 @@ jobs:
     - name: Install dependencies and run test
       run: npm i
     - run: npm run build
+    - run: npm run migrate
     - run: npm test
