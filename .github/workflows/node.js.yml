@@ -34,7 +34,7 @@ jobs:
       - name: 🔍 Run Tests
         run: npm test
         env:
-          Test_DB: postgres://postgres:${{ secrets.POSTGRES_PASSWORD }}@localhost:5433/${{ secrets.POSTGRES_TEST_DB }} 
+          Test_DB: ${{ secrets.Test_DB }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           NODE_ENV: test
           TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
