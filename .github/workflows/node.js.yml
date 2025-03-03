@@ -12,13 +12,23 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      TEST_DB: ${{secrets.TEST_DB}}
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: T2210200jacky!
+          POSTGRES_DB: Test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
-    strategy:
-      matrix:
-        node-version: ['20.x']
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    env:
+      TEST_DB: postgres://postgres:T2210200jacky!@localhost:5432/Test  # Use the correct port
 
     steps:
     - uses: actions/checkout@v4
@@ -28,7 +38,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - name: Install dependencies and run test
-      run: npm i
+      run: npm install
     - run: npm run build
-    - run: npm run migrate
     - run: npm test
