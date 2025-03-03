@@ -99,7 +99,8 @@ export const getAllUsers = async (req: Request, res: Response): Promise<void> =>
             lastName: user.lastName,
             email: user.email,
             status: user.active,
-            role: (user as any).roleDetail.name
+            role: (user as any).roleDetail.name,
+            createdAt: user.createdAt
         }));
 
         res.status(200).json({ message: "Users retrieved successfully", users: neededUsers });

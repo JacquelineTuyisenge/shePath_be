@@ -22,6 +22,7 @@ export class User extends Model<UserModelAttributes, UserCreationAttributes> {
     public city?: string;
 
     public roleDetail?: Role;
+    createdAt: any;
 
     public static associate(models: { Role: typeof Role }) {
         User.belongsTo(models.Role, { as: "roleDetail", foreignKey: "role" });

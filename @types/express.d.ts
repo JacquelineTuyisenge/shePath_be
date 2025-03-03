@@ -1,10 +1,12 @@
 import { Request } from "express";
+// src/types/express/index.d.ts
 
-declare module "express-serve-static-core" {
+import { User } from '../models/User';  // Adjust the path to your User model
+
+declare global {
+  namespace Express {
     interface Request {
-        user?: {
-            id: string;
-            roleId: string;
-        };
+      user?: User;  // Add the `user` property with the correct type
     }
+  }
 }

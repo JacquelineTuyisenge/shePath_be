@@ -59,3 +59,32 @@ export const authenticateUser = async (req: Request, res: Response, next: NextFu
         res.status(405).json({ message: "Something went wrong"});
     }
 };
+
+export const checkRole = (allowedRoles: string[]) => {
+     return async (req: AuthRequest, res: Response, next: NextFunction) => {
+      try {
+        const userId = req.user?.id; // Assuming `req.user` is set from authentication middleware
+        if (!userId) {
+          res.status(401).json({ success: false, message: "Unauthorized" });
+          return;
+        }
+  
+        const user = await User.findByPk(userId);
+        if (!user) {
+          res.status(401).json({ success: false, message: "User not found" });
+          return;
+        }
+  
+        if (!allowedRoles.includes(user.role)) {
+          res.status(403).json({ success: false, message: "Forbidden: Insufficient permissions" });
+          return;
+        }
+  
+        next();
+      } catch (error) {
+        res.status(500).json({ success: false, message: "Server error" });
+        return;
+      }
+    };
+  };
+  
