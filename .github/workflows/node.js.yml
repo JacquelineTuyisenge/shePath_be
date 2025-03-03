@@ -35,9 +35,13 @@ jobs:
         run: npm test
         env:
           Test_DB: postgres://postgres:${{ secrets.POSTGRES_PASSWORD }}@localhost:5433/${{ secrets.POSTGRES_TEST_DB }} 
-          JWT_SECRET: ${{ secrets.JWT_SECRET }},
-          NODE_ENV: test,
-          TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }},
-          TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }},
-          TWILIO_PHONE_NUMBER: ${{ secrets.TWILIO_PHONE_NUMBER }},
-          PHONE: ${{ secrets.PHONE }},
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          NODE_ENV: test
+          TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+          TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+          TWILIO_PHONE_NUMBER: ${{ secrets.TWILIO_PHONE_NUMBER }}
+          PHONE: ${{ secrets.PHONE }}
+
+      - name: 🚀 Trigger Deploy on Render
+        run: |
+          curl -X POST "${{secrets.RENDER_SERVICE_ID}}"

@@ -8,9 +8,9 @@ import Course, { initCourseModel } from './models/course';
 
 dotenv.config();
 
-const DB = process.env.DB as string;
+const Database = process.env.NODE_ENV === 'test' ? process.env.Test_DB as string : process.env.DB as string;
 
-const sequelize = new Sequelize(DB, {
+const sequelize = new Sequelize(Database, {
     dialect: 'postgres',
     logging: false,
 });
@@ -32,6 +32,13 @@ associateModels();
 
 const connectDB = async () => {
     try {
+
+        if (process.env.NODE_ENV === 'test') {
+            console.log('🔧 Connecting to the TEST database...');
+        } else {
+            console.log('🌍 Connecting to the PRODUCTION database...');
+        }
+
         await sequelize.authenticate();
         console.log('✅ Database connected successfully!');
         await sequelize.sync();
