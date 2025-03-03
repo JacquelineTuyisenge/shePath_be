@@ -8,10 +8,21 @@ import Course, { initCourseModel } from './models/course';
 
 dotenv.config();
 
-const Database = process.env.NODE_ENV === 'test' ? process.env.TEST_DB as string : process.env.DB as string;
+const env = process.env.NODE_ENV || 'development';
 
-const sequelize = new Sequelize(Database, {
+const Database =
+    env === 'test' ? process.env.TEST_DB : 
+    env === 'production' ? process.env.DB_PROD :
+    process.env.DB;
+
+const sequelize = new Sequelize(Database as string, {
     dialect: 'postgres',
+    dialectOptions: env === 'production' ? {
+        ssl: {
+            require: true,
+            rejectUnauthorized: false
+        }
+    } : {},
     logging: false,
 });
 
@@ -35,8 +46,10 @@ const connectDB = async () => {
 
         if (process.env.NODE_ENV === 'test') {
             console.log('🔧 Connecting to the TEST database...');
+        } else if (process.env.NODE_ENV === 'development'){
+            console.log('🌍 Connecting to the DEVELOPMENT database...');
         } else {
-            console.log('🌍 Connecting to the PRODUCTION database...');
+            console.log('Connecting to PRODUCTION database');
         }
 
         await sequelize.authenticate();

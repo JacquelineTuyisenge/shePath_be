@@ -54,9 +54,18 @@ const role_1 = __importStar(require("./models/role"));
 const courseCategory_1 = __importStar(require("./models/courseCategory"));
 const course_1 = __importStar(require("./models/course"));
 dotenv_1.default.config();
-const Database = process.env.NODE_ENV === 'test' ? process.env.TEST_DB : process.env.DB;
+const env = process.env.NODE_ENV || 'development';
+const Database = env === 'test' ? process.env.TEST_DB :
+    env === 'production' ? process.env.DB_PROD :
+        process.env.DB;
 const sequelize = new sequelize_1.Sequelize(Database, {
     dialect: 'postgres',
+    dialectOptions: env === 'production' ? {
+        ssl: {
+            require: true,
+            rejectUnauthorized: false
+        }
+    } : {},
     logging: false,
 });
 exports.sequelize = sequelize;
@@ -78,8 +87,11 @@ const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
         if (process.env.NODE_ENV === 'test') {
             console.log('🔧 Connecting to the TEST database...');
         }
+        else if (process.env.NODE_ENV === 'development') {
+            console.log('🌍 Connecting to the DEVELOPMENT database...');
+        }
         else {
-            console.log('🌍 Connecting to the PRODUCTION database...');
+            console.log('Connecting to PRODUCTION database');
         }
         yield sequelize.authenticate();
         console.log('✅ Database connected successfully!');
