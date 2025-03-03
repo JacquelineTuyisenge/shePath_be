@@ -2,10 +2,12 @@
   "name": "shepath_be",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/app.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon src/app.ts",
+    "start:prod": "npm run build && node dist/app.js",  
+    "build": "tsc",
     "migrate": "npx sequelize-cli db:migrate --config src/config/sequelize.config.js --migrations-path src/migrations",
     "migrate:undo": "npx sequelize-cli db:migrate:undo --config src/config/sequelize.config.js --migrations-path src/migrations",
     "migrate:undo:all": "npx sequelize-cli db:migrate:undo:all --config src/config/sequelize.config.js --migrations-path src/migrations",
