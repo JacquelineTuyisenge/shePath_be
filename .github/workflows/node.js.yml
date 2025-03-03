@@ -13,11 +13,7 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
-          POSTGRES_USER: ${{secrets.POSTGRES_USER}}
-          POSTGRES_DB: ${{secrets.POSTGRES_DB}}
-        ports:
-          - 5433:5432
+          Test_DB: ${{ secrets.Test_DB }}
 
     steps:
       - name: 🛠️ Checkout Repository
