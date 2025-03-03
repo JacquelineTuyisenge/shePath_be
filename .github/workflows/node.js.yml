@@ -16,9 +16,9 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_DB: ${{ secrets.POSTGRES_DB}}
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: T2210200jacky!
+          POSTGRES_DB: Test
         ports:
           - 5432:5432
         options: >-
@@ -28,7 +28,7 @@ jobs:
           --health-retries 5
 
     env:
-      TEST_DB: ${{ secrets.TEST_DATABASE_URL }}
+      TEST_DB: postgres://postgres:T2210200jacky!@localhost:5433/Test
 
     steps:
     - uses: actions/checkout@v4
