@@ -7,7 +7,8 @@ describe('Database Connection', () => {
     let sequelize: Sequelize;
 
     beforeAll(async () => {
-        const databaseUrl = process.env.Test_DB as string;
+        console.log('Database URL:', process.env.TEST_DB);  
+        const databaseUrl = process.env.TEST_DB as string;
         sequelize = new Sequelize(databaseUrl, {
             dialect: 'postgres',
             logging: false

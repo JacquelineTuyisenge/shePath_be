@@ -8,7 +8,7 @@ import Course, { initCourseModel } from './models/course';
 
 dotenv.config();
 
-const Database = process.env.NODE_ENV === 'test' ? process.env.Test_DB as string : process.env.DB as string;
+const Database = process.env.NODE_ENV === 'test' ? process.env.TEST_DB as string : process.env.DB as string;
 
 const sequelize = new Sequelize(Database, {
     dialect: 'postgres',
