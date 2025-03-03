@@ -76,10 +76,12 @@ npm run dev
 ```
 Open the app in your browser at http://localhost:5173.
 
-🎨 Designs
-Figma Mockups
-
-View the Figma Designs
-[LINK](https://www.figma.com/design/7wqTgHN5H7TwS666ksKzky/Capstone?node-id=20-2&t=kt62VP6Md40weocX-1)
 
 🚀 Deployment Plan
+
+Backend
+- Render deployment
+- link: 
+https://shepath-be.onrender.com/
+- screenshot:
+<img src="./render.png"/>
