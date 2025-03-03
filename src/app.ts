@@ -17,7 +17,7 @@ app.use(express.json());
 
 //cors
 app.use(cors({
-    origin: 'https://she-path-front.vercel.app',
+    origin: "*",
     credentials: true
 }));
 

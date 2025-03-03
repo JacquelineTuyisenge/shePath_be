@@ -74,7 +74,8 @@ Start the React development server:
 ```bash
 npm run dev
 ```
-Open the app in your browser at http://localhost:5173.
+Open the app in your browser at :
+https://she-path-front.vercel.app
 
 
 🚀 Deployment Plan
