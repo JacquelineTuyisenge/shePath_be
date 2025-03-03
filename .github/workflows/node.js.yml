@@ -13,7 +13,7 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          Test_DB: ${{ secrets.Test_DB }}
+          Test_DB: ${{ secrets.Test_DB }}  # Only use Test_DB here
 
     steps:
       - name: 🛠️ Checkout Repository
@@ -30,7 +30,7 @@ jobs:
       - name: 🔍 Run Tests
         run: npm test
         env:
-          Test_DB: ${{ secrets.Test_DB }}
+          Test_DB: ${{ secrets.Test_DB }}  # Use Test_DB here as well
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           NODE_ENV: test
           TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
