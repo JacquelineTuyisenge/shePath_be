@@ -149,8 +149,8 @@ export const getCourseById = async (req: Request, res: Response) => {
 // Update a course (Admin & Mentor only)
 export const updateCourse = async (req: Request, res: Response) => {
     try {
-      const { id, categoryId } = req.params; // Get categoryId from params
-      const { title, description } = req.body;
+      const { id } = req.params; // Get categoryId from params
+      const { title, description, content } = req.body;
   
       const course = await Course.findByPk(id);
       if (!course) {
@@ -158,12 +158,12 @@ export const updateCourse = async (req: Request, res: Response) => {
         return;
       }
   
-      await course.update({ title, description, categoryId });
+      await course.update({ title, description, content });
   
       res.status(200).json({ success: true, message: "Course updated successfully", data: course });
       return;
     } catch (error) {
-      res.status(500).json({ success: false, message: "Server error" });
+      res.status(500).json({ success: false, message: `${error}` });
       return;
     }
   };

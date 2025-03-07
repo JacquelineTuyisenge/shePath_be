@@ -86,3 +86,10 @@ Backend
 https://shepath-be.onrender.com/
 - screenshot:
 <img src="./render.png"/>
+
+Frontend
+- Vercel deployment
+link: 
+she-path-front.vercel.app/
+- screenshots:
+<img>

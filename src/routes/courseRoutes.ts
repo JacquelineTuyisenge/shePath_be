@@ -10,7 +10,7 @@ router.get("/", getCourses); // Public
 router.get("/:id", getCourseById); // Public
 
 router.post("/:categoryId", isAdmin, validateCourse, createCourse); 
-router.patch("/:id/:categoryId", isAdmin, validateCourse, updateCourse); 
+router.patch("/:id", isAdmin, validateCourse, updateCourse); 
 router.delete("/:id", isAdmin, deleteCourse); 
 
 export default router;

@@ -12,8 +12,10 @@ export const createCourse = async (req: Request, res: Response) => {
       res.status(400).json({ success: false, errors: errors.array() });
       return;
     }
+  
 
     const { title, description, content } = req.body;
+    
     const { categoryId } = req.params; // Get categoryId from params
 
     const newCourse = await Course.create({
