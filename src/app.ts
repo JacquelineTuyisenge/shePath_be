@@ -16,8 +16,13 @@ const app = express();
 app.use(express.json());
 
 //cors
+// app.use(cors({
+//     origin: 'https://she-path-front.vercel.app',
+//     credentials: true
+// }));
+
 app.use(cors({
-    origin: 'https://she-path-front.vercel.app',
+    origin: ['http://localhost:5173', 'https://she-path-front.vercel.app'],
     credentials: true
 }));
 
