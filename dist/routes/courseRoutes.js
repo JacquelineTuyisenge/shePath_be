@@ -12,6 +12,6 @@ const router = express_1.default.Router();
 router.get("/", course_controller_1.getCourses); // Public
 router.get("/:id", course_controller_1.getCourseById); // Public
 router.post("/:categoryId", authMiddleware_1.isAdmin, course_validation_1.validateCourse, course_controller_1.createCourse);
-router.patch("/:id/:categoryId", authMiddleware_1.isAdmin, course_validation_1.validateCourse, course_controller_1.updateCourse);
+router.patch("/:id", authMiddleware_1.isAdmin, course_validation_1.validateCourse, course_controller_1.updateCourse);
 router.delete("/:id", authMiddleware_1.isAdmin, course_controller_1.deleteCourse);
 exports.default = router;

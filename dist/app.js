@@ -30,7 +30,7 @@ app.use(express_1.default.json());
 //     credentials: true
 // }));
 app.use((0, cors_1.default)({
-    origin: 'http://localhost:5173',
+    origin: ['http://localhost:5173', 'https://she-path-front.vercel.app'],
     credentials: true
 }));
 //use auth routes

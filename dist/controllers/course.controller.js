@@ -142,19 +142,19 @@ exports.getCourseById = getCourseById;
 // Update a course (Admin & Mentor only)
 const updateCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id, categoryId } = req.params; // Get categoryId from params
-        const { title, description } = req.body;
+        const { id } = req.params; // Get categoryId from params
+        const { title, description, content } = req.body;
         const course = yield course_1.Course.findByPk(id);
         if (!course) {
             res.status(404).json({ success: false, message: "Course not found" });
             return;
         }
-        yield course.update({ title, description, categoryId });
+        yield course.update({ title, description, content });
         res.status(200).json({ success: true, message: "Course updated successfully", data: course });
         return;
     }
     catch (error) {
-        res.status(500).json({ success: false, message: "Server error" });
+        res.status(500).json({ success: false, message: `${error}` });
         return;
     }
 });
