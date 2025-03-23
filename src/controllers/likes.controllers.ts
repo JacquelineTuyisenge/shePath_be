@@ -61,7 +61,7 @@ export const getLikeCount = async (req: Request, res: Response) => {
 
         const likeCount = await Like.count({ where: { topicId, commentId } });
 
-        res.status(200).json({ message: "Like count retrieved", count: likeCount });
+        res.status(200).json({ message: "Like count that is retrieved", count: likeCount });
 
     } catch (error: any) {
         res.status(500).json({ message: "Server error", error: error.message });
