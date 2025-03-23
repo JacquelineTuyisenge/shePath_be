@@ -1,10 +1,13 @@
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
-// import Models from './models';
 import User, { initUserModel } from './models/user';
 import Role, { initRoleModel } from './models/role';
 import CourseCategory, {initCourseCategoryModel} from './models/courseCategory';
 import Course, { initCourseModel } from './models/course';
+import Topic, { initTopicModel } from './models/topic';
+import Comment, { initCommentModel } from './models/comment';
+import Like, { initLikeModel } from './models/like';
+import { initMessageModel } from './models/message';
 
 dotenv.config();
 
@@ -31,13 +34,20 @@ initUserModel(sequelize);
 initRoleModel(sequelize);
 initCourseCategoryModel(sequelize);
 initCourseModel(sequelize);
+initTopicModel(sequelize);
+initCommentModel(sequelize);
+initLikeModel(sequelize);
+initMessageModel(sequelize);
 
 // **associate models properly**
 const associateModels = () => {
-    User.associate({ Role });
+    User.associate({ Role, Topic, Comment, Like });
     Role.associate({ User });
     Course.associate({CourseCategory});
     CourseCategory.associate({Course});
+    Topic.associate({User, Comment, Like});
+    Comment.associate({User, Topic});
+    Like.associate({User, Topic});
 };
 associateModels();
 
@@ -61,18 +71,5 @@ const connectDB = async () => {
         process.exit(1);
     }
 };
-
-// const db_models = Models(sequelize);
-
-
-// Object.keys(db_models).forEach((key) => {
-// 	// @ts-expect-error ignore expected errors
-// 	if (db_models[key].associate) {
-// 		// @ts-expect-error ignore expected errors
-// 		db_models[key].associate(db_models);
-// 	}
-// });
-
-// export const database_models = { ...db_models };
 
 export {sequelize, connectDB};

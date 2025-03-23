@@ -3,6 +3,9 @@ import { UserCreationAttributes, UserModelAttributes } from "./attributes";
 // import { database_models } from "../server";
 // import Models from ".";
 import Role from "./role";
+import Topic from "./topic";
+import Comment from "./comment";
+import Like from "./like";
 
 export class User extends Model<UserModelAttributes, UserCreationAttributes> {
     public id!: string;
@@ -24,8 +27,11 @@ export class User extends Model<UserModelAttributes, UserCreationAttributes> {
     public roleDetail?: Role;
     createdAt: any;
 
-    public static associate(models: { Role: typeof Role }) {
+    public static associate(models: { Role: typeof Role; Topic: typeof Topic; Comment: typeof Comment; Like: typeof Like }) {
         User.belongsTo(models.Role, { as: "roleDetail", foreignKey: "role" });
+        User.hasMany(models.Topic, { as: "topics", foreignKey: "userId" });
+        User.hasMany(models.Comment, { as: "comments", foreignKey: "userId" });
+        User.hasMany(models.Like, { as: "likes", foreignKey: "userId" });
     }    
       
 }
