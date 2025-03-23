@@ -284,7 +284,8 @@ export const editProfile = async (req: Request, res: Response) => {
         res.status(200).json({ message: 'Profile updated successfully', user: updatedUserProfile });
         return;
     } catch (error: any) {
-        res.status(500).json({ message: 'Internal server error', error: error.message });
+        console.log("eroroorrr", error)
+        res.status(500).json({ message:  'SomeTHING WENT wrong', error});
         return;
     }
 };
