@@ -32,28 +32,3 @@ export const createComment = async (req: Request, res: Response) => {
         return;
     }
 };
-
-// export const getCommentsByTopic = async (req: Request, res: Response) => {
-//     try {
-//         const { topicId } = req.params;
-
-//         const topic = await Topic.findByPk(topicId);
-//         if (!topic) {
-//             res.status(404).json({ message: "Topic not found" });
-//             return
-//         }
-
-//         const comments = await Comment.findAll({
-//             where: { topicId },
-//             include: [{ model: User, as: "user", attributes: ["id", "name", "email"] }],
-//             order: [["createdAt", "DESC"]]
-//         });
-
-//         res.status(200).json({ message: "Comments retrieved", comments });
-//         return;
-
-//     } catch (error: any) {
-//         res.status(500).json({ message: "Server error", error: error.message });
-//         return;
-//     }
-// };

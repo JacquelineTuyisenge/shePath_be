@@ -8,6 +8,8 @@ import Topic, { initTopicModel } from './models/topic';
 import Comment, { initCommentModel } from './models/comment';
 import Like, { initLikeModel } from './models/like';
 import { initMessageModel } from './models/message';
+import Chat, { initChatModel } from './models/chat';
+import CourseProgress, { initCourseProgressModel } from './models/courseProgress';
 
 dotenv.config();
 
@@ -38,6 +40,8 @@ initTopicModel(sequelize);
 initCommentModel(sequelize);
 initLikeModel(sequelize);
 initMessageModel(sequelize);
+initChatModel(sequelize);
+initCourseProgressModel(sequelize);
 
 // **associate models properly**
 const associateModels = () => {
@@ -48,6 +52,8 @@ const associateModels = () => {
     Topic.associate({User, Comment, Like});
     Comment.associate({User, Topic});
     Like.associate({User, Topic});
+    Chat.associate({ User });
+    CourseProgress.associate({ User, Course})
 };
 associateModels();
 

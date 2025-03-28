@@ -4,6 +4,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import { User } from "../models/user";
 import {Role} from "../models/role";
 import { v2 as cloudinary } from 'cloudinary';
+
 import { sendEMail } from "../utils/nodemailer";
 import dotenv from "dotenv";
 
@@ -41,7 +42,7 @@ export const registerUser = async (req: Request, res: Response) => {
         const userRole = await Role.findByPk(newUser.role);
         console.log("user role", userRole);
 
-        res.status(201).json({ message: "User registered successfully",  }); //token: generateToken(newUser.id, newUser.role)
+        res.status(201).json({ message: "User registered successfully",  }); 
     } catch (error: any) {
         console.error("Registration error:", error);
         res.status(500).json({ message: "Server error", error: error.message }); 
@@ -125,7 +126,6 @@ export const resetPassword = async (req: Request, res:Response) => {
             return;
         }
 
-
         const decoded = jwt.verify(token as string, process.env.JWT_SECRET as string) as { id: string };
         const user = await User.findByPk(decoded.id);
 
@@ -179,6 +179,50 @@ export const getAllUsers = async (req: Request, res: Response): Promise<void> =>
     }
 };
 
+export const getAllMentors = async (req: Request, res:Response): Promise<void> => {
+    
+    const mentorRole = await Role.findOne({
+        where : {
+            name: 'Mentor'
+        },
+    });
+
+    if (!mentorRole) {
+        res.status(404).json({ message: "Mentor role not found" });
+        return;
+    };
+
+    try {
+        const mentors = await User.findAll({
+            where: { role: mentorRole.id },
+            include: [{
+                model: Role,
+                as: "roleDetail"
+            }]
+        });
+
+        const neededMentors = mentors.map((mentor) => ({
+            id: mentor.id,
+            userName: mentor.userName,
+            firstName: mentor.firstName,
+            lastName: mentor.lastName,
+            email: mentor.email,
+            profile: mentor.profile,
+            status: mentor.active,
+            role: (mentor as any).roleDetail.name,
+            address: mentor.address,
+            city: mentor.city,
+            country: mentor.country,
+            createdAt: mentor.createdAt
+        }));
+
+        res.status(200).json({ message: "Mentors Retrieved Successfully", mentors: neededMentors });
+    } catch(error: any) {
+        res.status(500).json({ message: "Server Error", error});
+        console.log("Errrrrrrrrorrrrr", error);
+        return;
+    }
+};
 
 export const getProfile = async (req: Request, res: Response) => {
     try {

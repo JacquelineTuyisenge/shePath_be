@@ -1,3 +1,4 @@
+// models/course.ts
 import { Sequelize, Model, DataTypes, UUIDV4 } from "sequelize";
 import CourseCategory from "./courseCategory";
 import { courseAttributes, courseCreationAttributes } from "./attributes";
@@ -8,6 +9,7 @@ export class Course extends Model<courseAttributes, courseCreationAttributes> {
     description!: string;
     content!: string;
     categoryId!: string;
+    image?: string;  // Add image field (URL from Cloudinary)
 
     public category?: CourseCategory;
     createdAt: any;
@@ -46,6 +48,10 @@ export const initCourseModel = (sequelize: Sequelize) => {
                     key: "id",
                 },
                 onDelete: "CASCADE",
+            },
+            image: {  // Add image field to schema
+                type: DataTypes.STRING,
+                allowNull: true,
             },
         },
         {

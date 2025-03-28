@@ -17,7 +17,6 @@ export const toggleLike = async (req: Request, res: Response) => {
         const userId = decoded.id;
         const { topicId, commentId } = req.body;
 
-        // Adjusted validation to check for either topicId or commentId
         if (!topicId) {
             res.status(400).json({ message: "Provide topicId" });
             return;
