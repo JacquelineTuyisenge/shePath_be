@@ -1,7 +1,5 @@
 import { Sequelize, Model, DataTypes, UUIDV4, Optional } from "sequelize";
 import { UserCreationAttributes, UserModelAttributes } from "./attributes";
-// import { database_models } from "../server";
-// import Models from ".";
 import Role from "./role";
 import Topic from "./topic";
 import Comment from "./comment";

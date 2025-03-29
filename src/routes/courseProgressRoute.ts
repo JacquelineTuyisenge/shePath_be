@@ -6,11 +6,8 @@ import { getCourseProgress, updateCourseProgress } from "../controllers/coursePr
 
 const router = express.Router();
 
-// Middleware to authenticate requests (adjust based on your auth setup)
-// router.use(authenticateUser);
-
 // Get progress for a course
-router.get("/:courseId", getCourseProgress);
+router.get("/:courseId", authenticateUser, getCourseProgress);
 
 // Update progress for a course
 router.post(
@@ -18,7 +15,7 @@ router.post(
   [
     body("progress").isFloat({ min: 0, max: 100 }).withMessage("Progress must be between 0 and 100"),
     body("completed").isBoolean().withMessage("Completed must be a boolean"),
-  ],
+  ], authenticateUser,
   updateCourseProgress
 );
 

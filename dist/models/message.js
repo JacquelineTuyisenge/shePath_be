@@ -1,30 +1,30 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.initRoleModel = exports.Role = void 0;
+exports.initMessageModel = exports.Message = void 0;
 const sequelize_1 = require("sequelize");
-class Role extends sequelize_1.Model {
-    static associate(models) {
-        Role.hasMany(models.User, { as: "Users", foreignKey: "role" });
-    }
+class Message extends sequelize_1.Model {
 }
-exports.Role = Role;
-const initRoleModel = (sequelize) => {
-    Role.init({
+exports.Message = Message;
+const initMessageModel = (sequelize) => {
+    Message.init({
         id: {
             type: sequelize_1.DataTypes.UUID,
             defaultValue: sequelize_1.UUIDV4,
             primaryKey: true,
             allowNull: false,
         },
-        name: {
+        email: {
             type: sequelize_1.DataTypes.STRING,
+            allowNull: false,
+        },
+        message: {
+            type: sequelize_1.DataTypes.TEXT,
             allowNull: false,
         },
     }, {
         sequelize,
-        tableName: "roles"
+        tableName: "messages",
     });
-    return Role;
 };
-exports.initRoleModel = initRoleModel;
-exports.default = Role;
+exports.initMessageModel = initMessageModel;
+exports.default = Message;

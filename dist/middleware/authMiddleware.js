@@ -49,16 +49,21 @@ exports.isAdmin = isAdmin;
 const authenticateUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const token = (_a = req.header("Authorization")) === null || _a === void 0 ? void 0 : _a.split(" ")[1];
-    if (!token)
-        return res.status(401).json({ message: "Unauthorized, login" });
+    if (!token) {
+        res.status(401).json({ message: "Unauthorized, login" });
+        return;
+    }
     try {
         const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
-        if (!decoded)
-            return res.status(401).json({ message: "Unauthorized, login" });
+        if (!decoded) {
+            res.status(401).json({ message: "Unauthorized, login" });
+            return;
+        }
         next();
     }
     catch (error) {
         res.status(405).json({ message: "Something went wrong" });
+        return;
     }
 });
 exports.authenticateUser = authenticateUser;

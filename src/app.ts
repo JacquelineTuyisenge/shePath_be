@@ -66,12 +66,6 @@ const startServer = async () => {
     });
 };
 
-console.log('Cloudinary Config:', {
-    cloud_name: process.env.CLOUDNAME,
-    api_key: process.env.APIKEY,
-    api_secret: process.env.APISECRET,
-});
-
 startServer();
 
 export default app;
