@@ -14,9 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteCourse = exports.updateCourse = exports.getCourseById = exports.getCoursesByCategory = exports.getCourses = exports.createCourse = void 0;
 const course_1 = require("../models/course");
-const smsService_1 = require("../smsService");
 const courseCategory_1 = __importDefault(require("../models/courseCategory"));
 const express_validator_1 = require("express-validator");
+const cloudinary_1 = require("cloudinary");
 const createCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Validate request body
@@ -27,18 +27,19 @@ const createCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         }
         const { title, description, content } = req.body;
         const { categoryId } = req.params; // Get categoryId from params
+        let imageUrl;
+        if (req.file) {
+            const result = yield cloudinary_1.v2.uploader.upload(req.file.path);
+            imageUrl = result.secure_url;
+        }
         const newCourse = yield course_1.Course.create({
             title,
             description,
             content,
             categoryId,
+            image: imageUrl
         });
         const category = yield courseCategory_1.default.findByPk(categoryId);
-        //sms
-        const phoneNumber = process.env.PHONE; // my verified number 
-        const message = `${newCourse.title}`;
-        yield (0, smsService_1.sendSMS)(phoneNumber, message);
-        console.log("hyyyyyyyyyyyyy");
         res.status(201).json({
             success: true,
             message: "Course created successfully",
@@ -71,6 +72,7 @@ const getCourses = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             title: course.title,
             description: course.description,
             content: course.content,
+            image: course.image,
             categoryId: course.category.name,
             createdAt: course.createdAt
         }));
@@ -149,7 +151,12 @@ const updateCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             res.status(404).json({ success: false, message: "Course not found" });
             return;
         }
-        yield course.update({ title, description, content });
+        let imageUrl = course.image;
+        if (req.file) {
+            const result = yield cloudinary_1.v2.uploader.upload(req.file.path);
+            imageUrl = result.secure_url;
+        }
+        yield course.update({ title, description, content, image: imageUrl });
         res.status(200).json({ success: true, message: "Course updated successfully", data: course });
         return;
     }

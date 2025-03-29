@@ -44,6 +44,7 @@ export interface courseAttributes {
     id: string;
     title: string;
     description?: string;
+    image?: string;
     content: string;
     categoryId: string;
 }

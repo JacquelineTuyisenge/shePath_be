@@ -16,6 +16,7 @@ exports.deleteRole = exports.updateRole = exports.assignRole = exports.createRol
 const role_1 = require("../models/role");
 const user_1 = __importDefault(require("../models/user"));
 const response_1 = require("../utils/response");
+const nodemailer_1 = require("../utils/nodemailer");
 const allRoles = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const roles = yield role_1.Role.findAll();
@@ -52,27 +53,43 @@ const assignRole = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const { role } = req.body;
         const userId = req.params.userId;
-        // Find role by name
         const existingRole = yield role_1.Role.findOne({ where: { name: role } });
         console.log("existingRole", existingRole);
         if (!existingRole) {
             (0, response_1.sendResponse)(res, 404, "NOT FOUND", "Role not found");
             return;
         }
-        // Find user by ID
         const user = yield user_1.default.findByPk(userId);
         console.log("user", user);
         if (!user) {
             (0, response_1.sendResponse)(res, 404, "NOT FOUND", "User not found");
             return;
         }
-        // Assign role to user
+        const email = user.email;
         yield user_1.default.update({ role: existingRole.id }, { where: { id: userId } });
-        // Fetch updated user with role details
         const updatedUser = yield user_1.default.findOne({
             where: { id: userId },
             include: [{ model: role_1.Role, as: "roleDetail" }],
         });
+        if (email) {
+            const mail = {
+                to: email,
+                subject: "Role changed",
+                html: `
+                    <p> Dear ${user.firstName}, we are pleased to tell you that your role on ShePath platform has been updated. Please log in again for a new experience! If you encounter any issues, do not hesitate to contact us.</p>
+                `,
+            };
+            try {
+                yield (0, nodemailer_1.sendEMail)(mail);
+                console.log(`Email sent to ${email}`);
+            }
+            catch (emailError) {
+                console.error("Error sending email:", emailError);
+            }
+        }
+        else {
+            console.log("User  email is undefined, email not sent.");
+        }
         (0, response_1.sendResponse)(res, 201, "SUCCESS", "Role assigned successfully!", updatedUser);
         return;
     }
@@ -85,13 +102,11 @@ exports.assignRole = assignRole;
 const updateRole = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     try {
-        // Find role by ID
         const role = yield role_1.Role.findOne({ where: { id } });
         if (!role) {
             (0, response_1.sendResponse)(res, 404, "NOT FOUND", `Role with ID ${id} doesn't exist`);
             return;
         }
-        // Update role name
         yield role_1.Role.update({ name: req.body.name }, { where: { id } });
         (0, response_1.sendResponse)(res, 201, "SUCCESS", "Role updated successfully");
         return;
@@ -105,13 +120,11 @@ exports.updateRole = updateRole;
 const deleteRole = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     try {
-        // Find role by ID
         const role = yield role_1.Role.findOne({ where: { id } });
         if (!role) {
             (0, response_1.sendResponse)(res, 404, "NOT FOUND", `Role with ID ${id} doesn't exist`);
             return;
         }
-        // Delete role
         yield role_1.Role.destroy({ where: { id } });
         (0, response_1.sendResponse)(res, 201, "SUCCESS", "Role deleted successfully");
     }

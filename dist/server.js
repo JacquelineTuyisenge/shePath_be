@@ -48,11 +48,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectDB = exports.sequelize = void 0;
 const sequelize_1 = require("sequelize");
 const dotenv_1 = __importDefault(require("dotenv"));
-// import Models from './models';
 const user_1 = __importStar(require("./models/user"));
 const role_1 = __importStar(require("./models/role"));
 const courseCategory_1 = __importStar(require("./models/courseCategory"));
 const course_1 = __importStar(require("./models/course"));
+const topic_1 = __importStar(require("./models/topic"));
+const comment_1 = __importStar(require("./models/comment"));
+const like_1 = __importStar(require("./models/like"));
+const message_1 = require("./models/message");
+const chat_1 = __importStar(require("./models/chat"));
+const courseProgress_1 = __importStar(require("./models/courseProgress"));
 dotenv_1.default.config();
 const env = process.env.NODE_ENV || 'development';
 const Database = env === 'test' ? process.env.TEST_DB :
@@ -74,12 +79,23 @@ exports.sequelize = sequelize;
 (0, role_1.initRoleModel)(sequelize);
 (0, courseCategory_1.initCourseCategoryModel)(sequelize);
 (0, course_1.initCourseModel)(sequelize);
+(0, topic_1.initTopicModel)(sequelize);
+(0, comment_1.initCommentModel)(sequelize);
+(0, like_1.initLikeModel)(sequelize);
+(0, message_1.initMessageModel)(sequelize);
+(0, chat_1.initChatModel)(sequelize);
+(0, courseProgress_1.initCourseProgressModel)(sequelize);
 // **associate models properly**
 const associateModels = () => {
-    user_1.default.associate({ Role: role_1.default });
+    user_1.default.associate({ Role: role_1.default, Topic: topic_1.default, Comment: comment_1.default, Like: like_1.default });
     role_1.default.associate({ User: user_1.default });
     course_1.default.associate({ CourseCategory: courseCategory_1.default });
     courseCategory_1.default.associate({ Course: course_1.default });
+    topic_1.default.associate({ User: user_1.default, Comment: comment_1.default, Like: like_1.default });
+    comment_1.default.associate({ User: user_1.default, Topic: topic_1.default });
+    like_1.default.associate({ User: user_1.default, Topic: topic_1.default });
+    chat_1.default.associate({ User: user_1.default });
+    courseProgress_1.default.associate({ User: user_1.default, Course: course_1.default });
 };
 associateModels();
 const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {

@@ -14,12 +14,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.initUserModel = exports.User = void 0;
 const sequelize_1 = require("sequelize");
-// import { database_models } from "../server";
-// import Models from ".";
 const role_1 = __importDefault(require("./role"));
 class User extends sequelize_1.Model {
     static associate(models) {
         User.belongsTo(models.Role, { as: "roleDetail", foreignKey: "role" });
+        User.hasMany(models.Topic, { as: "topics", foreignKey: "userId" });
+        User.hasMany(models.Comment, { as: "comments", foreignKey: "userId" });
+        User.hasMany(models.Like, { as: "likes", foreignKey: "userId" });
     }
 }
 exports.User = User;

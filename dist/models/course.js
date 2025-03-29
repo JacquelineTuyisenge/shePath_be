@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.initCourseModel = exports.Course = void 0;
+// models/course.ts
 const sequelize_1 = require("sequelize");
 const courseCategory_1 = __importDefault(require("./courseCategory"));
 class Course extends sequelize_1.Model {
@@ -40,6 +41,10 @@ const initCourseModel = (sequelize) => {
                 key: "id",
             },
             onDelete: "CASCADE",
+        },
+        image: {
+            type: sequelize_1.DataTypes.STRING,
+            allowNull: true,
         },
     }, {
         sequelize,

@@ -47,16 +47,23 @@ export const isAdmin = async (req: AuthRequest, res: Response, next: NextFunctio
 
 export const authenticateUser = async (req: Request, res: Response, next: NextFunction) => {
     const token = req.header("Authorization")?.split(" ")[1];
-    if (!token) return res.status(401).json({ message: "Unauthorized, login" });
+    if (!token) {
+      res.status(401).json({ message: "Unauthorized, login" });
+      return;
+    }
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
 
-        if (!decoded) return res.status(401).json({ message: "Unauthorized, login" });
+        if (!decoded) {
+          res.status(401).json({ message: "Unauthorized, login" });
+          return;
+        }
 
         next();
     } catch (error) {
         res.status(405).json({ message: "Something went wrong"});
+        return;
     }
 };
 

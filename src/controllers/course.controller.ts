@@ -1,9 +1,9 @@
 import { Request, Response} from "express";
-import { sendResponse } from "../utils/response";
 import {Course} from "../models/course";
-import { sendSMS } from '../smsService'
 import CourseCategory from "../models/courseCategory";
 import { validationResult } from "express-validator";
+import { v2 as cloudinary } from "cloudinary";
+import upload from "../middleware/multer";
 
 export const createCourse = async (req: Request, res: Response) => {
     try {
@@ -16,24 +16,23 @@ export const createCourse = async (req: Request, res: Response) => {
   
       const { title, description, content } = req.body;
       const { categoryId } = req.params; // Get categoryId from params
+
+      let imageUrl: string | undefined;
+
+      if (req.file) {
+        const result = await cloudinary.uploader.upload(req.file.path);
+        imageUrl = result.secure_url;
+      }
   
       const newCourse = await Course.create({
         title,
         description,
         content,
         categoryId,
+        image: imageUrl
       });
 
       const category = await CourseCategory.findByPk(categoryId);
-
-      //sms
-
-      const phoneNumber = process.env.PHONE as string; // my verified number 
-      const message = `${newCourse.title}`;
-      await sendSMS(phoneNumber, message);
-
-      console.log("hyyyyyyyyyyyyy");
-
   
       res.status(201).json({ 
         success: true, 
@@ -73,6 +72,7 @@ export const getCourses = async (req: Request, res: Response) => {
           title: course.title,
           description: course.description,
           content: course.content,
+          image: course.image,
           categoryId: (course as any).category.name,
           createdAt: course.createdAt
         }))
@@ -157,8 +157,14 @@ export const updateCourse = async (req: Request, res: Response) => {
         res.status(404).json({ success: false, message: "Course not found" });
         return;
       }
+
+      let imageUrl = course.image;
+      if (req.file) {
+          const result = await cloudinary.uploader.upload(req.file.path);
+          imageUrl = result.secure_url;
+      }
   
-      await course.update({ title, description, content });
+      await course.update({ title, description, content, image: imageUrl });
   
       res.status(200).json({ success: true, message: "Course updated successfully", data: course });
       return;
