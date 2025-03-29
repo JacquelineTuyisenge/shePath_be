@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Course from '../models/course'; 
 import Topic from "../models/topic";
+import Comment from "../models/comment";
 
 export const handleUssdRequest = async (req: Request, res: Response) => {
     const { text } = req.body;
@@ -49,10 +50,12 @@ export const handleUssdRequest = async (req: Request, res: Response) => {
         }
     } else if (text.startsWith('4*')) {
         const topicIndex = parseInt(text.split('*')[1]) - 1; 
-        const topics = await Topic.findAll();
+        const topics = await Topic.findAll({
+            include: [{ model: Comment, as: 'comments' }], // Fetch comments with topic
+        });
         if (topics[topicIndex]) {
             const topic = topics[topicIndex];
-            response = `END Topic Details:\nContent: ${topic.content}`
+            response = `END Topic Details:\nContent: ${topic.content}`;
         } else {
             response = `END Invalid selection. Please try again.`;
         }
