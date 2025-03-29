@@ -149,6 +149,7 @@ const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
+            phoneNumber: user.phoneNumber,
             status: user.active,
             role: user.roleDetail.name,
             createdAt: user.createdAt
@@ -188,6 +189,7 @@ const getAllMentors = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             firstName: mentor.firstName,
             lastName: mentor.lastName,
             email: mentor.email,
+            phoneNumber: mentor.phoneNumber,
             profile: mentor.profile,
             status: mentor.active,
             role: mentor.roleDetail.name,

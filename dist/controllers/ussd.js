@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.handleUssdRequest = void 0;
 const course_1 = __importDefault(require("../models/course"));
 const topic_1 = __importDefault(require("../models/topic"));
+const comment_1 = __importDefault(require("../models/comment"));
 const handleUssdRequest = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { text } = req.body;
     let response = '';
@@ -70,7 +71,9 @@ const handleUssdRequest = (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
     else if (text.startsWith('4*')) {
         const topicIndex = parseInt(text.split('*')[1]) - 1;
-        const topics = yield topic_1.default.findAll();
+        const topics = yield topic_1.default.findAll({
+            include: [{ model: comment_1.default, as: 'comments' }], // Fetch comments with topic
+        });
         if (topics[topicIndex]) {
             const topic = topics[topicIndex];
             response = `END Topic Details:\nContent: ${topic.content}`;

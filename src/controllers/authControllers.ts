@@ -165,6 +165,7 @@ export const getAllUsers = async (req: Request, res: Response): Promise<void> =>
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
+            phoneNumber: user.phoneNumber,
             status: user.active,
             role: (user as any).roleDetail.name,
             createdAt: user.createdAt
@@ -207,6 +208,7 @@ export const getAllMentors = async (req: Request, res:Response): Promise<void> =
             firstName: mentor.firstName,
             lastName: mentor.lastName,
             email: mentor.email,
+            phoneNumber: mentor.phoneNumber,
             profile: mentor.profile,
             status: mentor.active,
             role: (mentor as any).roleDetail.name,
