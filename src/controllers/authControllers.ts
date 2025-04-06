@@ -67,11 +67,27 @@ export const loginUser = async (req: Request, res: Response) => {
 
         // Retrieve role name dynamically
         const userRole = await Role.findByPk(user.role);
+        if (!userRole) {
+            res.status(404).json({message: "no role found"});
+            return;
+        }
         console.log("user role", userRole?.name);
+
+        const token = generateToken(user.id, user.role);
+
+        res.cookie("token", token, {
+            // httpOnly: false,
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            // secure: false,
+            // sameSite: "none",
+            sameSite: "strict",
+            maxAge: 365 * 24 * 60 * 60 * 1000,
+        });
 
         res.json({ 
             message: "user logged in successfully!", 
-            token: generateToken(user.id, user.role), 
+            // token: generateToken(user.id, user.role), 
             user: {
                 id: user.id,
                 role: userRole?.name
@@ -228,7 +244,9 @@ export const getAllMentors = async (req: Request, res:Response): Promise<void> =
 
 export const getProfile = async (req: Request, res: Response) => {
     try {
-        const token = req.header("Authorization")?.split(" ")[1];
+        const token = req.cookies.token;
+
+        // const token = req.header("Authorization")?.split(" ")[1];
         if (!token) {
             res.status(401).json({ message: "Unauthorized, login" });
             return;
@@ -333,5 +351,27 @@ export const editProfile = async (req: Request, res: Response) => {
         console.log("eroroorrr", error)
         res.status(500).json({ message:  'SomeTHING WENT wrong', error});
         return;
+    }
+};
+
+export const logoutUser = async (req: Request, res: Response) => {
+    try {
+        // Clear the token cookie
+        res.clearCookie("token", {
+            httpOnly: false,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            path: "/" // Ensure this matches the path used when setting the cookie
+        });
+
+        res.status(200).json({ 
+            message: "User logged out successfully" 
+        });
+    } catch (error: any) {
+        console.error("Logout error:", error);
+        res.status(500).json({ 
+            message: "Server error during logout",
+            error: error.message 
+        });
     }
 };

@@ -12,16 +12,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkRole = exports.authenticateUser = exports.isAdmin = void 0;
+exports.checkRole = exports.isAuthenticated = exports.authenticateUser = exports.isAdmin = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const user_1 = require("../models/user");
 const role_1 = require("../models/role");
 dotenv_1.default.config();
 const isAdmin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
     try {
-        const token = (_a = req.header("Authorization")) === null || _a === void 0 ? void 0 : _a.split(" ")[1];
+        const token = req.cookies.token;
+        // const token = req.header("Authorization")?.split(" ")[1];
         if (!token) {
             res.status(401).json({ message: "No token, authorization denied" });
             return;
@@ -47,8 +47,8 @@ const isAdmin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.isAdmin = isAdmin;
 const authenticateUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
-    const token = (_a = req.header("Authorization")) === null || _a === void 0 ? void 0 : _a.split(" ")[1];
+    const token = req.cookies.token;
+    // const token = req.header("Authorization")?.split(" ")[1];
     if (!token) {
         res.status(401).json({ message: "Unauthorized, login" });
         return;
@@ -67,11 +67,33 @@ const authenticateUser = (req, res, next) => __awaiter(void 0, void 0, void 0, f
     }
 });
 exports.authenticateUser = authenticateUser;
+const isAuthenticated = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.cookies.token;
+    // const token = req.header("Authorization")?.split(" ")[1];
+    if (!token) {
+        res.status(401).json({ message: "Unauthorized, login" });
+        return;
+    }
+    try {
+        const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
+        if (!decoded) {
+            res.status(401).json({ message: "Unauthorized, login" });
+            return;
+        }
+        res.json({ authenticated: true, user: decoded, token: token });
+        return;
+    }
+    catch (error) {
+        res.status(405).json({ message: "Something went wrong" });
+        return;
+    }
+});
+exports.isAuthenticated = isAuthenticated;
 const checkRole = (allowedRoles) => {
     return (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         var _a;
         try {
-            const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id; // Assuming `req.user` is set from authentication middleware
+            const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
             if (!userId) {
                 res.status(401).json({ success: false, message: "Unauthorized" });
                 return;

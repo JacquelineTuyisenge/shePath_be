@@ -3,11 +3,21 @@ import { User } from './user';
 import { Comment } from './comment';
 import Like from "./like";
 
-export class Topic extends Model {
+interface TopicAttributes {
+    id?: string;
+    content: string;
+    imageUrl: string | null;
+    userId: string;
+}
+
+export class Topic extends Model<TopicAttributes> {
   public id!: number;
   public content!: string;
   public imageUrl!: string | null;
   public userId!: string;
+
+  public comments?: Comment[]; // Optional association
+  public likes?: Like[]; // Optional association
 
   public static associate(models: { User: typeof User; Comment: typeof Comment; Like: typeof Like }) {
     Topic.belongsTo(models.User, { as: "user", foreignKey: "userId" });

@@ -1,5 +1,6 @@
 import express from 'express';
 const bodyParser = require('body-parser');
+import cookieParser from 'cookie-parser';
 import { connectDB } from './server';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes';
@@ -26,7 +27,7 @@ const app = express();
 // app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
+app.use(cookieParser()); // for parsing cookies
 
 app.use(cors({
     origin: ['http://localhost:5173', 'https://she-path-front.vercel.app'],

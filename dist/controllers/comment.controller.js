@@ -17,9 +17,9 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const comment_1 = __importDefault(require("../models/comment"));
 const topic_1 = __importDefault(require("../models/topic"));
 const createComment = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
     try {
-        const token = (_a = req.header("Authorization")) === null || _a === void 0 ? void 0 : _a.split(" ")[1];
+        // const token = req.header("Authorization")?.split(" ")[1];
+        const token = req.cookies.token;
         if (!token) {
             res.status(401).json({ message: "Unauthorized, login" });
             return;

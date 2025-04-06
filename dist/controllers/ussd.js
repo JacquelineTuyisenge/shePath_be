@@ -21,10 +21,10 @@ const handleUssdRequest = (req, res) => __awaiter(void 0, void 0, void 0, functi
     let response = '';
     if (text === '') {
         response = `CON Welcome to ShePath! 🌟 What would you like to explore?
-        1. What is ShePath?
-        2. How do we help girls?
-        3. View available courses
-        4. View community topics`;
+    1. What is ShePath?
+    2. How do we help girls?
+    3. View available courses
+    4. View community topics`;
     }
     else if (text === '1') {
         response = `END ShePath is dedicated to empowering rural girls by providing access to education, mentorship, and resources. We believe every girl deserves a chance to learn and grow!`;
@@ -61,7 +61,7 @@ const handleUssdRequest = (req, res) => __awaiter(void 0, void 0, void 0, functi
         if (topics.length > 0) {
             response = `CON Community Topics:\n`;
             topics.forEach((topic, index) => {
-                response += `${index + 1}. ${topic.content.substring(0, 30)}...\n`;
+                response += `${index + 1}. ${topic.content.substring(0, 60)}...\n`;
             });
             response += `${topics.length + 1}. Back to main menu`;
         }
@@ -76,7 +76,18 @@ const handleUssdRequest = (req, res) => __awaiter(void 0, void 0, void 0, functi
         });
         if (topics[topicIndex]) {
             const topic = topics[topicIndex];
-            response = `END Topic Details:\nContent: ${topic.content}`;
+            const comments = topic.comments || []; // Now recognized by TypeScript
+            const likes = topic.likes || []; // Now recognized by TypeScript
+            const likesCount = likes.length;
+            response = `END Topic Details:\n\nContent: ${topic.content}\n\n${likesCount}Likes ${comments.length} Comments:\n`;
+            if (comments.length > 0) {
+                comments.forEach((comment, index) => {
+                    response += `${index + 1}. ${comment.content}\n`;
+                });
+            }
+            else {
+                response += `No comments yet.\n`;
+            }
         }
         else {
             response = `END Invalid selection. Please try again.`;

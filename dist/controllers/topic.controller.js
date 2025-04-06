@@ -25,9 +25,9 @@ const generateToken = (id, role) => {
     return jsonwebtoken_1.default.sign({ id, role }, process.env.JWT_SECRET, { expiresIn: "1y" });
 };
 const createTopic = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
     try {
-        const token = (_a = req.header("Authorization")) === null || _a === void 0 ? void 0 : _a.split(" ")[1];
+        // const token = req.header("Authorization")?.split(" ")[1];
+        const token = req.cookies.token;
         if (!token) {
             res.status(401).json({ message: "Unauthorized, login" });
             return;
@@ -100,10 +100,10 @@ const getTopicById = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 });
 exports.getTopicById = getTopicById;
 const updateTopic = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
     try {
         const { id } = req.params;
-        const token = (_a = req.header("Authorization")) === null || _a === void 0 ? void 0 : _a.split(" ")[1];
+        const token = req.cookies.token;
+        // const token = req.header("Authorization")?.split(" ")[1];
         if (!token) {
             res.status(401).json({ message: "Unauthorized, login" });
             return;
@@ -139,10 +139,10 @@ const updateTopic = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.updateTopic = updateTopic;
 const deleteTopic = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
     try {
         const { id } = req.params;
-        const token = (_a = req.header("Authorization")) === null || _a === void 0 ? void 0 : _a.split(" ")[1];
+        // const token = req.header("Authorization")?.split(" ")[1];
+        const token = req.cookies.token;
         if (!token) {
             res.status(401).json({ message: "Unauthorized, login" });
             return;

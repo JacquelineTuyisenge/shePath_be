@@ -11,7 +11,9 @@ interface AuthRequest extends Request {
 // Get course progress
 export const getCourseProgress = async (req: AuthRequest, res: Response) => {
   const { courseId } = req.params;
-  const token = req.header("Authorization")?.split(" ")[1];
+  const token = req.cookies.token;
+
+  // const token = req.header("Authorization")?.split(" ")[1];
 
   if (!token) {
     res.status(401).json({ message: "No token, authorization denied" });
@@ -44,7 +46,8 @@ export const updateCourseProgress = async (req: AuthRequest, res: Response) => {
   const { courseId } = req.params;
   const { progress, completed } = req.body;
 
-  const token = req.header("Authorization")?.split(" ")[1];
+  // const token = req.header("Authorization")?.split(" ")[1];
+  const token = req.cookies.token;
 
   if (!token) {
     res.status(401).json({ message: "No token, authorization denied" });

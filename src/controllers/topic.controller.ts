@@ -17,7 +17,9 @@ const generateToken = (id: string, role: string) => {
 export const createTopic = async (req: Request, res: Response) => {
     try {
 
-        const token = req.header("Authorization")?.split(" ")[1];
+        // const token = req.header("Authorization")?.split(" ")[1];
+        const token = req.cookies.token;
+
             if (!token) {
                 res.status(401).json({ message: "Unauthorized, login" });
                 return;
@@ -100,7 +102,9 @@ export const getTopicById = async (req: Request, res: Response) => {
 export const updateTopic = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        const token = req.header("Authorization")?.split(" ")[1];
+        const token = req.cookies.token;
+
+        // const token = req.header("Authorization")?.split(" ")[1];
 
         if (!token) {
             res.status(401).json({ message: "Unauthorized, login" });
@@ -147,7 +151,8 @@ export const updateTopic = async (req: Request, res: Response) => {
 export const deleteTopic = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        const token = req.header("Authorization")?.split(" ")[1];
+        // const token = req.header("Authorization")?.split(" ")[1];
+        const token = req.cookies.token;
 
         if (!token) {
             res.status(401).json({ message: "Unauthorized, login" });
