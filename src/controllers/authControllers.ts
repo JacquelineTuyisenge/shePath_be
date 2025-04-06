@@ -67,11 +67,26 @@ export const loginUser = async (req: Request, res: Response) => {
 
         // Retrieve role name dynamically
         const userRole = await Role.findByPk(user.role);
+        if (!userRole) {
+            res.status(404).json({message: "no role found"});
+            return;
+        }
         console.log("user role", userRole?.name);
+
+        const token = generateToken(user.id, user.role);
+
+        res.cookie("token", token, {
+            httpOnly: false,
+            secure: process.env.NODE_ENV === "production",
+            // secure: false,
+            // sameSite: "none",
+            sameSite: "strict",
+            maxAge: 365 * 24 * 60 * 60 * 1000,
+        });
 
         res.json({ 
             message: "user logged in successfully!", 
-            token: generateToken(user.id, user.role), 
+            // token: generateToken(user.id, user.role), 
             user: {
                 id: user.id,
                 role: userRole?.name
@@ -228,7 +243,9 @@ export const getAllMentors = async (req: Request, res:Response): Promise<void> =
 
 export const getProfile = async (req: Request, res: Response) => {
     try {
-        const token = req.header("Authorization")?.split(" ")[1];
+        const token = req.cookies.token;
+
+        // const token = req.header("Authorization")?.split(" ")[1];
         if (!token) {
             res.status(401).json({ message: "Unauthorized, login" });
             return;

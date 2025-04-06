@@ -7,7 +7,9 @@ import Comment from "../models/comment";
 
 export const toggleLike = async (req: Request, res: Response) => {
     try {
-        const token = req.header("Authorization")?.split(" ")[1];
+        // const token = req.header("Authorization")?.split(" ")[1];
+        const token = req.cookies.token;
+
         if (!token) {
             res.status(401).json({ message: "Unauthorized, login" });
             return;

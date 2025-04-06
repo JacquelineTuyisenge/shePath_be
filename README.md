@@ -1,10 +1,26 @@
-# ShePath
+# Capstone Project - ShePath
+
+## Overview
+This repository contains the backend code for the Capstone Project. It is built using [Node.js](https://nodejs.org/) and [Express](https://expressjs.com/). The backend serves as the API for the frontend application.
+
 
 ## 📖 Description
 
-The **ShePath Application** is a platform designed to empower women by providing mentorship, resources, and a supportive community. The project includes/will include a **backend API** and a **frontend interface** to ensure smooth and effective functionality.
+The **ShePath Application** is a platform designed to empower women by providing mentorship, resources, and a supportive community.
 
----
+## Table of Contents
+- [Installation](#installation)
+- [Running the Application](#running-the-application)
+- [API Endpoints](#api-endpoints)
+- [Environment Variables](#environment-variables)
+- [Contributing](#contributing)
+
+## Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/JacquelineTuyisenge/shePath_be.git
+   cd shePath_be
 
 ## 🔗 GitHub Repositories
 - **Backend Repository**: [ShePath Backend](hhttps://github.com/JacquelineTuyisenge/shePath_be.git)
@@ -19,7 +35,6 @@ The **ShePath Application** is a platform designed to empower women by providing
 - PostgreSQL (for the database)
 - Sequelize (for ORM in the backend)
 - React.js (for the frontend)
-- Docker (for containerization)
 
 ### Backend Setup
 1. Clone the backend repository:
@@ -34,26 +49,32 @@ The **ShePath Application** is a platform designed to empower women by providing
 npm install
 ```
 
-Create a .env file in the root directory for env variables
+3. Set up database
 
-env
-DB
-PORT
-DB_Test
-JWT_SECRET
+ - ensure pgAdmin is installed and have tablePlus for better experience
+ - creave **.env** file and include following:
+   - PORT
+   - DB
+   - TEST_DB
+   - JWT_SECRET
+   - NODE_ENV
+   - DB_PROD
+   - BASE_URL
+   - EMAIL
+   - PASS
+   - CLOUDNAME
+   - APIKEY
+   - APISECRET
 
-Run database migrations and seeders:
-
-
+4. Start server and run migrations
 ```bash
 npm run start
 npm run migrate
 npm run seed
 ```
 
-Access Swagger documentation at [COMING SOON!](http://localhost:3000/api-docs.)
 
-### Frontend Setup
+### Frontend
 Clone the frontend repository:
 
 ```bash
@@ -62,7 +83,6 @@ cd shepath-fe
 ```
 
 Install dependencies:
-
 
 ```bash
 npm install
@@ -80,16 +100,8 @@ https://she-path-front.vercel.app
 
 🚀 Deployment Plan
 
-Backend
-- Render deployment
-- link: 
-https://shepath-be.onrender.com/
-- screenshot:
-<img src="./render.png"/>
+### Backend
+- RailWay
 
-Frontend
-- Vercel deployment
-link: 
-she-path-front.vercel.app/
-- screenshots:
-<img>
+## Contributing
+- Jaqueline Tuyisenge

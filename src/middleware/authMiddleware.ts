@@ -12,7 +12,8 @@ interface AuthRequest extends Request {
 
 export const isAdmin = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try{
-        const token = req.header("Authorization")?.split(" ")[1];
+        const token = req.cookies.token;
+        // const token = req.header("Authorization")?.split(" ")[1];
 
         if(!token) {
             res.status(401).json({ message: "No token, authorization denied" });
@@ -46,7 +47,8 @@ export const isAdmin = async (req: AuthRequest, res: Response, next: NextFunctio
 
 
 export const authenticateUser = async (req: Request, res: Response, next: NextFunction) => {
-    const token = req.header("Authorization")?.split(" ")[1];
+    const token = req.cookies.token;
+    // const token = req.header("Authorization")?.split(" ")[1];
     if (!token) {
       res.status(401).json({ message: "Unauthorized, login" });
       return;
@@ -59,7 +61,6 @@ export const authenticateUser = async (req: Request, res: Response, next: NextFu
           res.status(401).json({ message: "Unauthorized, login" });
           return;
         }
-
         next();
     } catch (error) {
         res.status(405).json({ message: "Something went wrong"});
@@ -67,10 +68,35 @@ export const authenticateUser = async (req: Request, res: Response, next: NextFu
     }
 };
 
+export const isAuthenticated = async (req: Request, res: Response, next: NextFunction) => {
+  const token = req.cookies.token;
+  // const token = req.header("Authorization")?.split(" ")[1];
+  if (!token) {
+    res.status(401).json({ message: "Unauthorized, login" });
+    return;
+  }
+
+  try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
+
+      if (!decoded) {
+        res.status(401).json({ message: "Unauthorized, login" });
+        return;
+      }
+
+      res.json({ authenticated: true, user: decoded, token: token });
+      return;
+
+  } catch (error) {
+      res.status(405).json({ message: "Something went wrong"});
+      return;
+  }
+};
+
 export const checkRole = (allowedRoles: string[]) => {
      return async (req: AuthRequest, res: Response, next: NextFunction) => {
       try {
-        const userId = req.user?.id; // Assuming `req.user` is set from authentication middleware
+        const userId = req.user?.id;
         if (!userId) {
           res.status(401).json({ success: false, message: "Unauthorized" });
           return;

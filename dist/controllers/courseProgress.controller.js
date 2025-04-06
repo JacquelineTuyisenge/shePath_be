@@ -18,9 +18,9 @@ const express_validator_1 = require("express-validator");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 // Get course progress
 const getCourseProgress = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
     const { courseId } = req.params;
-    const token = (_a = req.header("Authorization")) === null || _a === void 0 ? void 0 : _a.split(" ")[1];
+    const token = req.cookies.token;
+    // const token = req.header("Authorization")?.split(" ")[1];
     if (!token) {
         res.status(401).json({ message: "No token, authorization denied" });
         return;
@@ -45,10 +45,10 @@ const getCourseProgress = (req, res) => __awaiter(void 0, void 0, void 0, functi
 exports.getCourseProgress = getCourseProgress;
 // Update course progress
 const updateCourseProgress = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
     const { courseId } = req.params;
     const { progress, completed } = req.body;
-    const token = (_a = req.header("Authorization")) === null || _a === void 0 ? void 0 : _a.split(" ")[1];
+    // const token = req.header("Authorization")?.split(" ")[1];
+    const token = req.cookies.token;
     if (!token) {
         res.status(401).json({ message: "No token, authorization denied" });
         return;

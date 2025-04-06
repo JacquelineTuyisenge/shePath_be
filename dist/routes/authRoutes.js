@@ -11,6 +11,7 @@ const multer_1 = __importDefault(require("../middleware/multer"));
 const router = express_1.default.Router();
 router.post("/register", authValidation_1.validateRegister, authControllers_1.registerUser);
 router.post("/login", authValidation_1.validateLogin, authControllers_1.loginUser);
+router.get("/check", authMiddleware_1.isAuthenticated);
 router.post("/forgot-password", authControllers_1.forgotPassword);
 router.post("/reset-password", authControllers_1.resetPassword);
 router.get("/users", authMiddleware_1.isAdmin, authControllers_1.getAllUsers);

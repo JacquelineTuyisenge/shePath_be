@@ -17,9 +17,9 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const like_1 = __importDefault(require("../models/like"));
 const topic_1 = __importDefault(require("../models/topic"));
 const toggleLike = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
     try {
-        const token = (_a = req.header("Authorization")) === null || _a === void 0 ? void 0 : _a.split(" ")[1];
+        // const token = req.header("Authorization")?.split(" ")[1];
+        const token = req.cookies.token;
         if (!token) {
             res.status(401).json({ message: "Unauthorized, login" });
             return;
