@@ -76,7 +76,8 @@ export const loginUser = async (req: Request, res: Response) => {
         const token = generateToken(user.id, user.role);
 
         res.cookie("token", token, {
-            httpOnly: false,
+            // httpOnly: false,
+            httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             // secure: false,
             // sameSite: "none",
@@ -350,5 +351,27 @@ export const editProfile = async (req: Request, res: Response) => {
         console.log("eroroorrr", error)
         res.status(500).json({ message:  'SomeTHING WENT wrong', error});
         return;
+    }
+};
+
+export const logoutUser = async (req: Request, res: Response) => {
+    try {
+        // Clear the token cookie
+        res.clearCookie("token", {
+            httpOnly: false,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            path: "/" // Ensure this matches the path used when setting the cookie
+        });
+
+        res.status(200).json({ 
+            message: "User logged out successfully" 
+        });
+    } catch (error: any) {
+        console.error("Logout error:", error);
+        res.status(500).json({ 
+            message: "Server error during logout",
+            error: error.message 
+        });
     }
 };
