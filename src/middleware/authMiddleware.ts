@@ -68,7 +68,7 @@ export const authenticateUser = async (req: Request, res: Response, next: NextFu
     }
 };
 
-export const isAuthenticated = async (req: Request, res: Response, next: NextFunction) => {
+export const isAuthenticated = async (req: Request, res: Response) => {
   const token = req.cookies.token;
   // const token = req.header("Authorization")?.split(" ")[1];
   if (!token) {

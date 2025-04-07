@@ -81,7 +81,7 @@ export const loginUser = async (req: Request, res: Response) => {
             secure: process.env.NODE_ENV === "production",
             // secure: false,
             // sameSite: "none",
-            sameSite: "strict",
+            sameSite: "none",
             maxAge: 365 * 24 * 60 * 60 * 1000,
         });
 
