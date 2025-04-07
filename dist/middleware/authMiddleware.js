@@ -67,7 +67,7 @@ const authenticateUser = (req, res, next) => __awaiter(void 0, void 0, void 0, f
     }
 });
 exports.authenticateUser = authenticateUser;
-const isAuthenticated = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const isAuthenticated = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = req.cookies.token;
     // const token = req.header("Authorization")?.split(" ")[1];
     if (!token) {
