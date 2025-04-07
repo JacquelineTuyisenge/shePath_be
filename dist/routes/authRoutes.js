@@ -18,4 +18,5 @@ router.get("/users", authMiddleware_1.isAdmin, authControllers_1.getAllUsers);
 router.get("/mentors", authMiddleware_1.authenticateUser, authControllers_1.getAllMentors);
 router.get("/profile", authControllers_1.getProfile);
 router.patch("/profile", multer_1.default.single("profile"), authControllers_1.editProfile);
+router.post('/logout', authControllers_1.logoutUser);
 exports.default = router;

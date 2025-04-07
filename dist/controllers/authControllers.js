@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.editProfile = exports.getProfile = exports.getAllMentors = exports.getAllUsers = exports.resetPassword = exports.forgotPassword = exports.loginUser = exports.registerUser = void 0;
+exports.logoutUser = exports.editProfile = exports.getProfile = exports.getAllMentors = exports.getAllUsers = exports.resetPassword = exports.forgotPassword = exports.loginUser = exports.registerUser = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = require("../models/user");
@@ -71,11 +71,12 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         console.log("user role", userRole === null || userRole === void 0 ? void 0 : userRole.name);
         const token = generateToken(user.id, user.role);
         res.cookie("token", token, {
-            httpOnly: false,
+            // httpOnly: false,
+            httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             // secure: false,
             // sameSite: "none",
-            sameSite: "strict",
+            sameSite: "none",
             maxAge: 365 * 24 * 60 * 60 * 1000,
         });
         res.json({
@@ -319,3 +320,25 @@ const editProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.editProfile = editProfile;
+const logoutUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        // Clear the token cookie
+        res.clearCookie("token", {
+            httpOnly: false,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            path: "/" // Ensure this matches the path used when setting the cookie
+        });
+        res.status(200).json({
+            message: "User logged out successfully"
+        });
+    }
+    catch (error) {
+        console.error("Logout error:", error);
+        res.status(500).json({
+            message: "Server error during logout",
+            error: error.message
+        });
+    }
+});
+exports.logoutUser = logoutUser;
