@@ -75,7 +75,7 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             // secure: false,
-            // sameSite: "none",
+            // sameSite: "strict",
             sameSite: "none",
             maxAge: 365 * 24 * 60 * 60 * 1000,
         });
@@ -324,10 +324,14 @@ const logoutUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         // Clear the token cookie
         res.clearCookie("token", {
-            httpOnly: false,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
-            path: "/" // Ensure this matches the path used when setting the cookie
+            httpOnly: true,
+            // secure: false,
+            // sameSite: "strict",
+            sameSite: "none",
+            // httpOnly: false,
+            secure: process.env.NODE_ENV === "production"
+            // sameSite: "strict",
+            // path: "/" // Ensure this matches the path used when setting the cookie
         });
         res.status(200).json({
             message: "User logged out successfully"
